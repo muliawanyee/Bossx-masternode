@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Masternodex</title>
+  <title>Bossx-Masternode</title>
   <style>
     body {
       font-family: Arial;
@@ -25,7 +25,7 @@
 </head>
 <body>
   <img src="logo.png" alt="Masternodex Logo">
-  <h1>Masternodex</h1>
+  <h1>Bossx-Masternode</h1>
   <p>Stake unit</p>
   <div class="balance" id="balance">0.000</div>
 
