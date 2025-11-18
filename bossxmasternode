@@ -10,6 +10,10 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- TradingView Widget -->
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <!-- Chart.js for Custom Flat Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -170,7 +174,7 @@
         /* Border Lines */
         .border-line {
             position: absolute;
-            background: linear-gradient(90deg, transparent, #10b981, #22c55e, #10b981, transparent);
+            background: linear-gradient(90deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
@@ -183,7 +187,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, #10b981, #22c55e, #10b981, transparent);
+            background: linear-gradient(90deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
             animation: borderTop 3s linear infinite;
             transform-origin: left;
         }
@@ -192,7 +196,7 @@
             right: 0;
             width: 2px;
             height: 100%;
-            background: linear-gradient(180deg, transparent, #10b981, #22c55e, #10b981, transparent);
+            background: linear-gradient(180deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
             animation: borderRight 3s linear infinite 0.7s;
             transform-origin: top;
         }
@@ -201,7 +205,7 @@
             right: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(270deg, transparent, #10b981, #22c55e, #10b981, transparent);
+            background: linear-gradient(270deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
             animation: borderBottom 3s linear infinite 1.4s;
             transform-origin: right;
         }
@@ -210,7 +214,7 @@
             left: 0;
             width: 2px;
             height: 100%;
-            background: linear-gradient(0deg, transparent, #10b981, #22c55e, #10b981, transparent);
+            background: linear-gradient(0deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
             animation: borderLeft 3s linear infinite 2.1s;
             transform-origin: bottom;
         }
@@ -322,20 +326,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 
+            box-shadow:
                 0 8px 15px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         .power-button:hover {
             transform: translateY(-2px);
-            box-shadow: 
+            box-shadow:
                 0 12px 25px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         .power-button.on {
             border-color: #10b981;
             background: linear-gradient(145deg, #059669, #047857);
-            box-shadow: 
+            box-shadow:
                 0 8px 15px rgba(16, 185, 129, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2),
                 0 0 20px rgba(16, 185, 129, 0.5);
@@ -343,7 +347,7 @@
         }
         .power-button.on:hover {
             transform: none;
-            box-shadow: 
+            box-shadow:
                 0 8px 15px rgba(16, 185, 129, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2),
                 0 0 20px rgba(16, 185, 129, 0.5);
@@ -351,13 +355,13 @@
         .power-button.off {
             border-color: #dc2626;
             background: linear-gradient(145deg, #b91c1c, #991b1b);
-            box-shadow: 
+            box-shadow:
                 0 8px 15px rgba(220, 38, 38, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 0 0 20px rgba(220, 38, 38, 0.5);
         }
         .power-button.off:hover {
-            box-shadow: 
+            box-shadow:
                 0 12px 25px rgba(220, 38, 38, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 0 0 25px rgba(220, 38, 38, 0.6);
@@ -425,9 +429,9 @@
             color: #9ca3af;
         }
         .node-input:disabled {
-            background: rgba(31, 41, 55, 0.3);
+            background: rgba(31, 41, 55, 0.6);
             border-color: #4b5563;
-            color: #6b7280;
+            color: #9ca3af;
             cursor: not-allowed;
         }
         /* Button styles */
@@ -611,14 +615,12 @@
             color: #3b82f6;
             text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
         }
-
         /* ============ CHAT ROOM STYLES ============ */
         /* Glowing Border Animation */
         @keyframes glowingBorder {
             0% { background-position: 0% 50%; }
             100% { background-position: 300% 50%; }
         }
-
         .glowing-border::before {
             content: '';
             position: absolute;
@@ -635,7 +637,6 @@
             animation: glowingBorder 8s linear infinite;
             pointer-events: none;
         }
-
         /* Message Animation */
         @keyframes messageIn {
             from {
@@ -647,56 +648,45 @@
                 transform: translateX(0);
             }
         }
-
         .message-animate {
             animation: messageIn 0.4s ease-out forwards;
         }
-
         /* Custom Scrollbar */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
         }
-
         .custom-scroll::-webkit-scrollbar-track {
             background: transparent;
         }
-
         .custom-scroll::-webkit-scrollbar-thumb {
             background-color: rgba(156, 163, 175, 0.5);
             border-radius: 3px;
         }
-
         .custom-scroll::-webkit-scrollbar-thumb:hover {
             background-color: rgba(156, 163, 175, 0.7);
         }
-
         /* Hover animations */
         .card-hover:hover {
             transform: scale(1.05);
             transition: all 0.3s ease;
         }
-
         .menu-item:hover {
             background: rgba(245, 158, 11, 0.05) !important;
             border-color: rgba(245, 158, 11, 0.5) !important;
         }
-
         .menu-item.active {
             background: rgba(245, 158, 11, 0.1) !important;
             border-color: #f59e0b !important;
             color: #f59e0b;
         }
-
         /* Live indicator */
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-
         .live-indicator {
             animation: blink 1.5s infinite;
         }
-
         .hover-glow:hover::before {
             content: '';
             position: absolute;
@@ -711,13 +701,316 @@
             filter: blur(2px);
             animation: glowingBorder 8s linear infinite;
         }
-
         /* Log Colors */
         .log-entry {
             color: #10b981; /* Hijau untuk log umum */
         }
         .log-entry.auto-claim {
             color: #f59e0b; /* Emas untuk auto-claim */
+        }
+        /* CSS Tambahan untuk Desain Mewah, Modern, Elegant, Canggih seperti Binance */
+        .exchange-bg {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            box-shadow: inset 0 0 50px rgba(245, 158, 11, 0.1);
+        }
+        .exchange-card {
+            background: linear-gradient(145deg, rgba(31, 41, 55, 0.9), rgba(17, 24, 39, 0.9));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2);
+            transition: all 0.3s ease;
+        }
+        .exchange-card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(245, 158, 11, 0.3);
+            transform: translateY(-5px);
+        }
+        .pair-selector {
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .pair-button {
+            background: linear-gradient(145deg, #f59e0b, #d97706);
+            color: #000;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            margin-bottom: 1rem;
+            display: block;
+            min-width: 100px;
+            flex-shrink: 0;
+            width: auto;
+        }
+        .pair-button:hover {
+            background: linear-gradient(145deg, #d97706, #b45309);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+            transform: scale(1.05);
+        }
+        .pair-button.active {
+            background: linear-gradient(145deg, #10b981, #059669);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        .order-book th {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 0.75rem;
+            font-weight: bold;
+        }
+        .order-book td {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        .buy-order {
+            color: #10b981;
+        }
+        .sell-order {
+            color: #dc2626;
+        }
+        .market-data {
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .trade-button.buy {
+            background: linear-gradient(145deg, #10b981, #059669);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        .trade-button.buy:hover {
+            background: linear-gradient(145deg, #059669, #047857);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+        }
+        .trade-button.sell {
+            background: linear-gradient(145deg, #dc2626, #b91c1c);
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+        }
+        .trade-button.sell:hover {
+            background: linear-gradient(145deg, #b91c1c, #991b1b);
+            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.4);
+        }
+        .history-table th {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 0.75rem;
+            font-weight: bold;
+        }
+        .history-table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        /* Border Lines Gold Variant */
+        .border-line-gold {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .stat-card:hover .border-line-gold,
+        .log-engine:hover .border-line-gold,
+        .info-system:hover .border-line-gold { /* Tambah selector untuk elemen baru */
+            opacity: 1;
+        }
+        .border-top-gold {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderTop 3s linear infinite;
+            transform-origin: left;
+        }
+        .border-right-gold {
+            top: 0;
+            right: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderRight 3s linear infinite 0.7s;
+            transform-origin: top;
+        }
+        .border-bottom-gold {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(270deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderBottom 3s linear infinite 1.4s;
+            transform-origin: right;
+        }
+        .border-left-gold {
+            bottom: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(0deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderLeft 3s linear infinite 2.1s;
+            transform-origin: bottom;
+        }
+        /* Border Lines White Variant (New for Team Developer Cards) */
+        .border-line-white {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .exchange-card:hover .border-line-white {
+            opacity: 1;
+        }
+        .border-top-white {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderTop 3s linear infinite;
+            transform-origin: left;
+        }
+        .border-right-white {
+            top: 0;
+            right: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderRight 3s linear infinite 0.7s;
+            transform-origin: top;
+        }
+        .border-bottom-white {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(270deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderBottom 3s linear infinite 1.4s;
+            transform-origin: right;
+        }
+        .border-left-white {
+            bottom: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(0deg, transparent, #ffffff, #f0f0f0, #ffffff, transparent);
+            animation: borderLeft 3s linear infinite 2.1s;
+            transform-origin: bottom;
+        }
+        /* Order Book Styles */
+        .order-book-section {
+            height: auto;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        .order-book-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .order-book-item:hover {
+            background: rgba(245, 158, 11, 0.05);
+            transition: background 0.3s ease;
+        }
+        .order-book-buy {
+            color: #10b981;
+        }
+        .order-book-sell {
+            color: #dc2626;
+        }
+        .order-book-total {
+            font-weight: bold;
+        }
+        /* Existing styles remain the same. Adding Binance-like enhancements */
+        .order-book th {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 0.75rem;
+            font-weight: bold;
+            text-align: right;
+        }
+        .order-book td {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .order-book table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        .buy-order {
+            color: #26a69a; /* Binance green */
+        }
+        .sell-order {
+            color: #f45567; /* Binance red */
+        }
+        .depth-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .buy-depth {
+            background: #26a69a;
+        }
+        .sell-depth {
+            background: #f45567;
+        }
+        .recent-trades td {
+            text-align: right;
+        }
+        /* Adjust chart container for larger size */
+        #chart-container {
+            height: 100% !important;
+            min-height: 400px;
+        }
+        #tradingview-chart {
+            height: 100%;
+            width: 100%;
+        }
+        /* Binance-like colors and fonts */
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .market-data {
+            background: #1e222d; /* Binance dark blue-gray */
+        }
+        .pair-button.active {
+            background: #f0b90b !important; /* Binance yellow */
+            color: #000 !important;
+        }
+        /* Additional for spread */
+        #spread {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 18px;
+            color: #f59e0b;
+        }
+        .skeleton-loading {
+            animation: pulse 1.5s infinite;
+        }
+        @media (max-width: 768px) {
+            .order-book-section {
+                max-height: 200px;
+            }
+            .pair-button {
+                padding: 0.5rem 1rem;
+            }
+            .market-data {
+                grid-template-columns: repeat(2, 1fr);
+                text-align: center;
+            }
+            .grid-cols-2 {
+                grid-cols-1;
+            }
         }
     </style>
 </head>
@@ -765,6 +1058,16 @@
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
                     <span class="ml-2 font-medium menu-text text-sm">Chat Room</span>
                 </a>
+                <!-- Fitur baru: Referral, ditambahkan tepat di bawah Chat Room -->
+                <a href="#" class="menu-item flex items-center px-2 py-2 mb-2 rounded-xl text-gray-400" data-page="referral">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                    <span class="ml-2 font-medium menu-text text-sm">Referral</span>
+                </a>
+                <!-- New Menu: Team Developer -->
+                <a href="#" class="menu-item flex items-center px-2 py-2 mb-2 rounded-xl text-gray-400" data-page="team-developer">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span class="ml-2 font-medium menu-text text-sm">Team Developer</span>
+                </a>
                 <!-- END MENU BARU -->
                 <a href="#" class="menu-item flex items-center px-2 py-2 mb-2 rounded-xl text-gray-400" data-page="faq">
                     <i data-lucide="help-circle" class="w-4 h-4"></i>
@@ -779,18 +1082,6 @@
                     <span class="ml-2 font-medium menu-text text-sm">Logout</span>
                 </a>
             </nav>
-            <!-- Footer -->
-            <div id="sidebar-footer" class="absolute bottom-4 left-2 right-2">
-                <div class="gradient-card p-3 rounded-xl gradient-border">
-                    <div class="text-center">
-                        <div class="w-6 h-6 bg-amber-400 rounded-full mx-auto mb-1 flex items-center justify-center">
-                            <span class="text-xs font-bold text-black">BX</span>
-                        </div>
-                        <p class="text-xs text-gray-400">Premium Member</p>
-                        <p class="text-sm font-semibold text-amber-400">VIP Access</p>
-                    </div>
-                </div>
-            </div>
         </div>
         <!-- Main Content -->
         <div class="flex-1 flex flex-col min-w-0">
@@ -819,11 +1110,11 @@
                     </div>
                     <!-- Right Side Actions -->
                     <div class="flex items-center space-x-3">
-                        <!-- Market Status -->
-                        <div class="flex items-center space-x-2 px-2 py-1 bg-green-500/10 rounded-lg border border-green-500/20">
+                        <!-- Market Status - Diubah menjadi tautan ke internal market -->
+                        <a href="#" class="flex items-center space-x-2 px-2 py-1 bg-green-500/10 rounded-lg border border-green-500/20 hover:bg-green-500/20 transition-colors" onclick="showPage('exchange'); event.preventDefault();">
                             <i data-lucide="globe" class="w-4 h-4 text-green-400"></i>
                             <span class="text-green-400 text-sm font-medium">Market Open</span>
-                        </div>
+                        </a>
                         <!-- Notifications -->
                         <button class="relative text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 p-2 rounded">
                             <i data-lucide="bell" class="w-4 h-4"></i>
@@ -879,10 +1170,10 @@
                                     <span id="bossx-balance">1000 BossX</span>
                                 </div>
                                 <div class="space-y-3">
-                                    <input 
+                                    <input
                                         id="activation-input"
-                                        type="number" 
-                                        placeholder="Minimal 10 BossX" 
+                                        type="number"
+                                        placeholder="Minimal 10 BossX"
                                         class="node-input"
                                         min="10"
                                         step="0.000000001"
@@ -977,7 +1268,12 @@
                             </div>
                         </div>
                         <!-- Log Engine Masternode -->
-                        <div id="log-engine" class="bg-gray-900 border border-amber-500/20 rounded-xl p-4 mt-6">
+                        <div id="log-engine" class="bg-gray-900 border border-amber-500/20 rounded-xl p-4 mt-6 relative overflow-hidden log-engine">
+                            <!-- Border Lines Gold -->
+                            <div class="border-line-gold border-top-gold"></div>
+                            <div class="border-line-gold border-right-gold"></div>
+                            <div class="border-line-gold border-bottom-gold"></div>
+                            <div class="border-line-gold border-left-gold"></div>
                             <div class="flex justify-between items-center mb-3">
                                 <h3 class="text-lg font-semibold text-amber-400">Log Engine Masternode</h3>
                                 <button id="clear-log" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition-colors">
@@ -987,7 +1283,12 @@
                             <div id="log-output" class="bg-black p-4 rounded-lg overflow-y-auto h-64 text-sm font-mono whitespace-pre-wrap space-y-1"></div> <!-- Ganti pre ke div untuk style per entry -->
                         </div>
                         <!-- System Status Information -->
-                        <div class="bg-gray-900 border border-blue-500/20 rounded-xl p-4 mt-6">
+                        <div class="bg-gray-900 border border-blue-500/20 rounded-xl p-4 mt-6 relative overflow-hidden info-system">
+                            <!-- Border Lines Gold -->
+                            <div class="border-line-gold border-top-gold"></div>
+                            <div class="border-line-gold border-right-gold"></div>
+                            <div class="border-line-gold border-bottom-gold"></div>
+                            <div class="border-line-gold border-left-gold"></div>
                             <div class="flex items-center mb-3">
                                 <i data-lucide="info" class="w-5 h-5 text-blue-400 mr-2"></i>
                                 <h3 class="text-lg font-semibold text-blue-400">Informasi Sistem BossX Validator</h3>
@@ -1197,7 +1498,7 @@
                                     <p class="text-gray-400">Tarik USDT dan BOSSX dari wallet Anda dengan aman dan cepat</p>
                                 </div>
                                 <div class="crypto-icon-large">
-                                    <i data-lucide="arrow-up-circle" class="text-red-400 w-8 h-8"></i>
+                                    <i data-lucide="arrow-up" class="text-red-400 w-8 h-8"></i>
                                 </div>
                             </div>
                         </div>
@@ -1262,10 +1563,10 @@
                                             <!-- Withdrawal Address -->
                                             <div class="space-y-2">
                                                 <label class="text-sm text-gray-400">Alamat Wallet Tujuan:</label>
-                                                <input 
+                                                <input
                                                     id="withdrawal-address"
-                                                    type="text" 
-                                                    placeholder="Masukkan alamat wallet tujuan" 
+                                                    type="text"
+                                                    placeholder="Masukkan alamat wallet tujuan"
                                                     class="node-input"
                                                 />
                                             </div>
@@ -1273,10 +1574,10 @@
                                             <div class="space-y-2">
                                                 <label class="text-sm text-gray-400">Jumlah Withdrawal:</label>
                                                 <div class="relative">
-                                                    <input 
+                                                    <input
                                                         id="withdrawal-amount"
-                                                        type="number" 
-                                                        placeholder="0.00" 
+                                                        type="number"
+                                                        placeholder="0.00"
                                                         class="node-input pr-16"
                                                         step="0.01"
                                                         min="0"
@@ -1334,7 +1635,7 @@
                                                 <ul class="text-sm text-gray-300 space-y-1">
                                                     <li id="withdrawal-min">• Minimal withdrawal: 10 USDT</li>
                                                     <li id="withdrawal-fee">• Fee withdrawal: 1 USDT</li>
-                                                    <li>• Periksa kembali alamat tujuan sebelum konfirmasi</li>
+                                                    <li>• Periksa kembali alamat alamat tujuan sebelum konfirmasi</li>
                                                     <li>• Proses withdrawal membutuhkan waktu 1-24 jam</li>
                                                 </ul>
                                             </div>
@@ -1426,13 +1727,199 @@
                         <div id="chat-room-container" class="w-full h-full"></div>
                     </div>
                     <!-- END HALAMAN BARU -->
-                    <!-- Other Pages -->
-                    <div id="p2p-page" class="page-content">
+                    <!-- Referral Page (Fitur baru) -->
+                    <div id="referral-page" class="page-content">
                         <div class="p-6">
-                            <h1 class="text-2xl font-bold text-amber-400 mb-4">Peer to Peer</h1>
-                            <p class="text-gray-400">Fitur Peer to Peer akan segera hadir...</p>
+                            <h1 class="text-2xl font-bold text-amber-400 mb-4">Referral</h1>
+                            <div class="stat-card p-6 mb-6">
+                                <h3 class="text-xl font-bold text-white mb-4">Kode Referral Anda</h3>
+                                <div class="flex items-center space-x-2 mb-4">
+                                    <input id="referral-code" type="text" class="node-input flex-1" readonly value="REF-XXXXXX" />
+                                    <button onclick="copyReferralCode()" class="copy-button flex items-center px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black rounded-lg font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105">
+                                        <i data-lucide="copy" class="mr-1 w-4 h-4"></i> Copy
+                                    </button>
+                                </div>
+                                <button onclick="generateReferralCode()" class="node-button mb-4">Generate Kode Baru</button>
+                                <p class="text-gray-400">Bagikan kode referral Anda untuk mendapatkan reward. Setiap referral sukses memberikan 10% bonus dari deposit pertama mereka.</p>
+                            </div>
+                            <div class="stat-card p-6">
+                                <h3 class="text-xl font-bold text-white mb-4">Statistik Referral</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-gray-400">Total Referral</p>
+                                        <p class="text-2xl font-bold text-white">0</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400">Reward Didapat</p>
+                                        <p class="text-2xl font-bold text-white">0 BossX</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!-- New Team Developer Page -->
+                    <div id="team-developer-page" class="page-content">
+                        <div class="p-6">
+                            <h1 class="text-3xl font-bold text-amber-400 mb-6">Team Developer</h1>
+                            <p class="text-gray-400 mb-8">Temui tim di balik BossX Crypto Exchange Platform.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- CEO Profile -->
+                                <div class="exchange-card p-6 text-center relative overflow-hidden">
+                                    <!-- Border Lines White -->
+                                    <div class="border-line-white border-top-white"></div>
+                                    <div class="border-line-white border-right-white"></div>
+                                    <div class="border-line-white border-bottom-white"></div>
+                                    <div class="border-line-white border-left-white"></div>
+                                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-500">
+                                        <img src="https://i.ibb.co.com/N2RF70Vs/IMG-1097-removebg-preview.png" alt="CEO" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Fery Muliawan</h3>
+                                    <p class="text-amber-400 mb-4">CEO (Chief Executive Officer)</p>
+                                    <p class="text-gray-300">Pendiri dan visioner BossX, dengan pengalaman 10 tahun di industri crypto.</p>
+                                </div>
+                                <!-- CFO Profile -->
+                                <div class="exchange-card p-6 text-center relative overflow-hidden">
+                                    <!-- Border Lines White -->
+                                    <div class="border-line-white border-top-white"></div>
+                                    <div class="border-line-white border-right-white"></div>
+                                    <div class="border-line-white border-bottom-white"></div>
+                                    <div class="border-line-white border-left-white"></div>
+                                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-500">
+                                        <img src="https://i.ibb.co.com/xKDSrKYw/Picsart-25-10-03-12-44-06-927.png" alt="CFO" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Mr.Ramadhan S.E</h3>
+                                    <p class="text-amber-400 mb-4">CFO Chief Financial Officer</p>
+                                    <p class="text-gray-300">Mengawasi operasi harian dan strategi bisnis platform.</p>
+                                </div>
+                                <!-- Manager Profile -->
+                                <div class="exchange-card p-6 text-center relative overflow-hidden">
+                                    <!-- Border Lines White -->
+                                    <div class="border-line-white border-top-white"></div>
+                                    <div class="border-line-white border-right-white"></div>
+                                    <div class="border-line-white border-bottom-white"></div>
+                                    <div class="border-line-white border-left-white"></div>
+                                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-500">
+                                        <img src="https://via.placeholder.com/150?text=Manager" alt="Manager" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Michael Johnson</h3>
+                                    <p class="text-amber-400 mb-4">Manager</p>
+                                    <p class="text-gray-300">Mengatur tim operasional dan memastikan kelancaran platform.</p>
+                                </div>
+                                <!-- CTO Profile -->
+                                <div class="exchange-card p-6 text-center relative overflow-hidden">
+                                    <!-- Border Lines White -->
+                                    <div class="border-line-white border-top-white"></div>
+                                    <div class="border-line-white border-right-white"></div>
+                                    <div class="border-line-white border-bottom-white"></div>
+                                    <div class="border-line-white border-left-white"></div>
+                                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-500">
+                                        <img src="https://i.ibb.co/gbVsGLy0/FB-IMG-1617237754232.jpg" alt="CIO" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Lee</h3>
+                                    <p class="text-amber-400 mb-4">CTO (Chief Technology Officer)</p>
+                                    <p class="text-gray-300">Bertanggung jawab atas infrastruktur teknis dan keamanan sistem.</p>
+                                </div>
+                                <!-- Secretary Profile -->
+                                <div class="exchange-card p-6 text-center relative overflow-hidden">
+                                    <!-- Border Lines White -->
+                                    <div class="border-line-white border-top-white"></div>
+                                    <div class="border-line-white border-right-white"></div>
+                                    <div class="border-line-white border-bottom-white"></div>
+                                    <div class="border-line-white border-left-white"></div>
+                                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-500">
+                                        <img src="https://via.placeholder.com/150?text=Secretary" alt="Secretary" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Emily Brown</h3>
+                                    <p class="text-amber-400 mb-4">Secretary</p>
+                                    <p class="text-gray-300">Menangani administrasi dan komunikasi internal tim.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- P2P Page -->
+                    <div id="p2p-page" class="page-content exchange-bg">
+                        <div class="exchange-card p-6 mb-6">
+                            <h1 class="text-3xl font-bold text-amber-400 mb-4 flex items-center">
+                                <i data-lucide="users" class="w-8 h-8 mr-2"></i>
+                                Peer to Peer Transfer
+                            </h1>
+                            <p class="text-gray-400 mb-6">Transfer BossX ke sesama pengguna menggunakan @username. Minimal transfer 1 BossX.</p>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Transfer Form -->
+                            <div class="exchange-card p-6">
+                                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="send" class="w-6 h-6 mr-2 text-amber-400"></i>
+                                    Kirim BossX
+                                </h2>
+                                <div class="space-y-4">
+                                    <div class="space-y-2">
+                                        <label class="text-sm text-gray-400">Username Penerima:</label>
+                                        <input
+                                            id="p2p-username"
+                                            type="text"
+                                            placeholder="@username"
+                                            class="node-input"
+                                        />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-sm text-gray-400">Jumlah BossX:</label>
+                                        <div class="relative">
+                                            <input
+                                                id="p2p-amount"
+                                                type="number"
+                                                placeholder="0.00"
+                                                class="node-input pr-16"
+                                                step="0.000000001"
+                                                min="1"
+                                            />
+                                            <button id="p2p-max" class="absolute right-2 top-1/2 transform -translate-y-1/2 px-2 py-1 bg-amber-500 text-black text-xs rounded font-semibold hover:bg-amber-600 transition-colors">
+                                                MAX
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button id="p2p-submit" class="node-button" onclick="submitP2PTransfer()">
+                                        <i data-lucide="send" class="mr-2 w-4 h-4"></i>
+                                        Kirim BossX
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- P2P Statistics -->
+                            <div class="exchange-card p-6">
+                                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="bar-chart" class="w-6 h-6 mr-2 text-amber-400"></i>
+                                    Statistik P2P
+                                </h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="stat-card p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <p class="text-sm text-gray-400">Total Dikirim</p>
+                                            <i data-lucide="arrow-up-circle" class="w-4 h-4 text-red-400"></i>
+                                        </div>
+                                        <div id="p2p-total-sent" class="text-xl font-bold text-white">0 BossX</div>
+                                    </div>
+                                    <div class="stat-card p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <p class="text-sm text-gray-400">Total Diterima</p>
+                                            <i data-lucide="arrow-down-circle" class="w-4 h-4 text-green-400"></i>
+                                        </div>
+                                        <div id="p2p-total-received" class="text-xl font-bold text-white">0 BossX</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- P2P History -->
+                        <div class="exchange-card mt-6 p-6">
+                            <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i data-lucide="history" class="w-6 h-6 mr-2 text-amber-400"></i>
+                                History Transfer P2P
+                            </h2>
+                            <div id="p2p-history-content" class="overflow-x-auto">
+                                <!-- History table will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Other Pages -->
                     <div id="faq-page" class="page-content">
                         <div class="p-6">
                             <h1 class="text-2xl font-bold text-amber-400 mb-4">FAQ</h1>
@@ -1445,11 +1932,141 @@
                             <p class="text-gray-400">Fitur Settings akan segera hadir...</p>
                         </div>
                     </div>
+                    <!-- Internal Market Page (Exchange) -->
+                    <div id="exchange-page" class="page-content exchange-bg">
+                        <div class="exchange-card p-4 mb-4">
+                            <h1 class="text-3xl font-bold text-amber-400 mb-2 flex items-center">
+                                <i data-lucide="dollar-sign" class="w-8 h-8 mr-2"></i>
+                                Internal Market - BossX
+                            </h1>
+                            <p class="text-gray-400 mb-4">Trade cryptocurrency with Binance-like interface and real data.</p>
+                        </div>
+                        <!-- Pair Selector and Market Data (Binance-style top bar) -->
+                        <div class="exchange-card p-4 mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-white mb-2">Trading Pairs</h2>
+                                <div class="flex flex-row flex-wrap gap-2 overflow-x-auto">
+                                    <button class="pair-button active" data-pair="BossX/USDT">BossX/USDT</button>
+                                    <button class="pair-button" data-pair="BTC/USDT">BTC/USDT</button>
+                                    <button class="pair-button" data-pair="ETH/USDT">ETH/USDT</button>
+                                    <button class="pair-button" data-pair="SOL/USDT">SOL/USDT</button>
+                                </div>
+                            </div>
+                            <div class="market-data w-full md:w-auto">
+                                <div>
+                                    <p class="text-gray-400 text-sm">Price</p>
+                                    <p id="current-price" class="text-lg font-bold text-white">$0.00</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-sm">24h Change</p>
+                                    <p id="price-change" class="text-lg font-bold text-green-400">+0.00%</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-sm">24h Volume</p>
+                                    <p id="volume" class="text-lg font-bold text-white">$0.00</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-sm">24h High/Low</p>
+                                    <p id="high-low" class="text-lg text-white">$0.00 / $0.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Main Trading Area (Binance-like Grid) -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" style="height: 90vh;">
+                            <!-- Center: Large Chart -->
+                            <div class="exchange-card p-4 col-span-3">
+                                <h2 class="text-lg font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="trending-up" class="w-5 h-5 mr-2 text-amber-400"></i>
+                                    Price Chart
+                                </h2>
+                                <div id="chart-container" class="h-full w-full">
+                                    <div id="tradingview-chart" class="h-full w-full"></div>
+                                </div>
+                            </div>
+                            <!-- Order Book Buy (Left below chart) -->
+                            <div class="exchange-card p-4 col-span-1 lg:col-span-1.5">
+                                <h2 class="text-lg font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="book-open" class="w-5 h-5 mr-2 text-amber-400"></i>
+                                    Buy Orders
+                                </h2>
+                                <div class="order-book-section mb-4">
+                                    <table class="w-full order-book">
+                                        <thead>
+                                            <tr>
+                                                <th>Price(USDT)</th>
+                                                <th>Amount</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="buy-orders" class="buy-order">
+                                            <tr class="skeleton-loading"><td colspan="3" class="h-4 bg-gray-700 rounded"></td></tr>
+                                            <tr class="skeleton-loading"><td colspan="3" class="h-4 bg-gray-700 rounded"></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Order Book Sell (Right below chart) -->
+                            <div class="exchange-card p-4 col-span-1 lg:col-span-1.5">
+                                <h2 class="text-lg font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="book-open" class="w-5 h-5 mr-2 text-amber-400"></i>
+                                    Sell Orders
+                                </h2>
+                                <div class="order-book-section mb-4">
+                                    <table class="w-full order-book">
+                                        <thead>
+                                            <tr>
+                                                <th>Price(USDT)</th>
+                                                <th>Amount</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="sell-orders" class="sell-order">
+                                            <tr class="skeleton-loading"><td colspan="3" class="h-4 bg-gray-700 rounded"></td></tr>
+                                            <tr class="skeleton-loading"><td colspan="3" class="h-4 bg-gray-700 rounded"></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="spread">Spread: Loading...</div>
+                            </div>
+                            <!-- Trade Section -->
+                            <div class="exchange-card p-4 col-span-3">
+                                <h2 class="text-lg font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="shopping-cart" class="w-5 h-5 mr-2 text-amber-400"></i>
+                                    Trade
+                                </h2>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Buy Trade -->
+                                    <div class="space-y-4">
+                                        <select id="buy-order-type" class="node-input">
+                                            <option value="limit">Limit</option>
+                                            <option value="market">Market</option>
+                                        </select>
+                                        <input id="buy-amount" type="number" placeholder="Amount" class="node-input" min="0" step="0.01" />
+                                        <input id="buy-price" type="number" placeholder="Price (Limit)" class="node-input" min="0" step="0.01" />
+                                        <p class="text-sm text-gray-400">AVBL: <span id="buy-avbl">1000 USDT</span></p>
+                                        <p class="text-sm text-gray-400">Estimasi fee: 0.1 BossX</p>
+                                        <button class="trade-button buy node-button w-full" onclick="demoTrade('buy')">Buy</button>
+                                    </div>
+                                    <!-- Sell Trade -->
+                                    <div class="space-y-4">
+                                        <select id="sell-order-type" class="node-input">
+                                            <option value="limit">Limit</option>
+                                            <option value="market">Market</option>
+                                        </select>
+                                        <input id="sell-amount" type="number" placeholder="Amount" class="node-input" min="0" step="0.01" />
+                                        <input id="sell-price" type="number" placeholder="Price (Limit)" class="node-input" min="0" step="0.01" />
+                                        <p class="text-sm text-gray-400">AVBL: <span id="sell-avbl">1000 BossX</span></p>
+                                        <p class="text-sm text-gray-400">Estimasi fee: 0.1 BossX</p>
+                                        <button class="trade-button sell node-button w-full" onclick="demoTrade('sell')">Sell</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
-
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
@@ -1558,16 +2175,19 @@
             USDT: [],
             BOSSX: []
         };
+        // P2P variables
+        const p2pHistory = [];
+        let ws; // WebSocket for order book
         // Real-time clock
         function updateClock() {
             const now = new Date();
-            const timeOptions = { 
+            const timeOptions = {
                 hour12: false,
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
             };
-            const dateOptions = { 
+            const dateOptions = {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -1613,12 +2233,22 @@
             currentPage = pageId;
             if (pageId === 'deposit') updateDepositContent();
             else if (pageId === 'withdrawal') updateWithdrawalContent();
-            else if (pageId === 'chat-room') {
+            else if (pageId === 'p2p') {
+                updateP2PContent();
+            } else if (pageId === 'exchange') {
+                // Init exchange page if needed
+                initExchangePage();
+            } else if (pageId === 'chat-room') {
                 // Initialize Chat Room when navigating to it
                 setTimeout(() => initializeChatRoom(), 100);
+            } else if (pageId === 'team-developer') {
+                // No additional init needed
+            }
+            if (pageId !== 'exchange') {
+                // Close WebSocket if leaving exchange page
+                if (ws) ws.close();
             }
         }
-        // Function to get formatted timestamp
         function getTimestamp() {
             const now = new Date();
             const year = now.getFullYear();
@@ -1632,7 +2262,7 @@
         // =============================
         // DASHBOARD FUNCTIONS (REVISED)
         // =============================
-        // Array template log (dari data Anda, plus variasi random)
+        // Array template log (dari data Anda, plus variasi)
         const logTemplates = [
             '[WARNING] High temp on GPU#0: 79°C | Fan: 90%',
             '[INFO] GPU#0: 48.4 MH/s | Temp: 78°C | Fan: 89%',
@@ -1644,11 +2274,10 @@
             '[INFO] GPU#0: 48.4 MH/s | Temp: 78°C | Fan: 89%',
             'Cooling system active'
         ];
-
         // Function appendLog dengan warna dan variasi
         function appendLog(message) {
             const logOutput = document.getElementById('log-output');
-            
+          
             // Tambah variasi random
             if (message.includes('GPU#0')) {
                 const randomTemp = Math.floor(Math.random() * 15) + 65; // 65-79°C
@@ -1662,10 +2291,10 @@
                 const randomPower = Math.floor(Math.random() * 200) + 3200; // 3200-3400W
                 message = message.replace(/3416/, randomPower);
             }
-            
+          
             // Tambah timestamp real-time
             const fullMessage = `${getTimestamp()} ${message}`;
-            
+          
             // Buat element p baru dengan class warna
             const logEntry = document.createElement('p');
             logEntry.classList.add('log-entry');
@@ -1673,22 +2302,20 @@
                 logEntry.classList.add('auto-claim'); // Warna emas
             }
             logEntry.textContent = fullMessage;
-            
+          
             // Tambah ke output
             logOutput.appendChild(logEntry);
-            
+          
             // Batasi 50 entry terakhir (hapus yang lama jika >50)
             while (logOutput.children.length > 50) {
                 logOutput.removeChild(logOutput.firstChild);
             }
-            
+          
             // Auto scroll
             logOutput.scrollTop = logOutput.scrollHeight;
         }
-
         let masaBerlaku = 40000000; // Masa berlaku awal 40.000.000 detik
         let masaInterval;
-
         function updateMasaBerlaku() {
             document.getElementById('masa-berlaku').textContent = masaBerlaku.toLocaleString('id-ID') + ' detik';
             if (masaBerlaku <= 0) {
@@ -1699,7 +2326,6 @@
                 showErrorMessage('Kontrak validasi berakhir! Aktivasi ulang diperlukan.');
             }
         }
-
         function startMasaCountdown() {
             if (masaInterval) clearInterval(masaInterval);
             masaInterval = setInterval(() => {
@@ -1710,7 +2336,6 @@
             }, 1000);
             updateMasaBerlaku(); // Update segera
         }
-
         function activateNode() {
             const inputValue = document.getElementById('activation-input').value;
             const inputAmount = parseFloat(inputValue) || 0;
@@ -1739,7 +2364,7 @@
             currentValidationReward = 0;
             totalRewardBalance = 0;
             // Add log entry for activation
-            appendLog('[STATUS] User aktivasi Node ' + inputAmount + ' BossX Status Aktiv');
+            appendLog('[STATUS] User aktivasi Node ' + inputAmount + ' BossX Status Aktif');
             // Update tampilan
             updateBalanceDisplays();
             showSuccessMessage(`Node aktif! Stake: ${inputAmount} BossX. Silakan tekan Power ON untuk mulai validasi.`);
@@ -1751,33 +2376,30 @@
             }
             // Hitung reward per detik berdasarkan stake
             const rewardPerSecond = stakedAmount * 0.000000038580246913580247;
-
             // Set lastClaimTime pertama kali saat start (dalam detik)
             lastClaimTime = Date.now() / 1000;
-
             // Interval untuk update UI dan cek claim (setiap detik, tapi hitung exact)
             validationInterval = setInterval(() => {
                 if (!isValidationRunning) return;
-
                 const currentTime = Date.now() / 1000; // Waktu sekarang dalam detik
                 const timeDelta = currentTime - lastClaimTime; // Delta sejak claim terakhir
-
                 // Hitung reward sementara berdasarkan delta exact
                 currentValidationReward = rewardPerSecond * timeDelta;
                 document.getElementById('validation-balance').textContent = currentValidationReward.toFixed(9) + ' BossX';
-
+                // Update countdown timer mundur
+                const remaining = 60 - Math.floor(timeDelta % 60);
+                document.getElementById('auto-claim-timer').textContent = remaining;
                 // Cek auto-claim jika delta >= 60 detik
                 if (timeDelta >= 60) {
                     performAutoClaim(); // Claim sekarang
                 }
             }, 1000);
-
             // Add log entries awal (dengan selisih detik acak)
             setTimeout(() => appendLog('[STATUS] Connected successfully to masternode Validasi Running'), Math.random() * 2000 + 1000); // 1-3 detik
             setTimeout(() => appendLog('[INFO] Connecting to master pool BossXPool.com:4444...'), Math.random() * 2000 + 3000); // 3-5 detik
             setTimeout(() => appendLog('[STATUS] Network sync: 100%'), Math.random() * 2000 + 5000); // 5-7 detik
             setTimeout(() => appendLog('[INFO] GPU#0: 48.3 MH/s | Temp: 68°C | Fan: 82%'), Math.random() * 2000 + 7000); // 7-9 detik
-            
+          
             // Periodic log dengan selisih detik random (1-5 detik per log baru)
             function addRandomLog() {
                 if (!isValidationRunning) return;
@@ -1787,7 +2409,7 @@
                 logInterval = setTimeout(addRandomLog, Math.floor(Math.random() * 4000) + 1000);
             }
             addRandomLog(); // Mulai loop
-            
+          
             showSuccessMessage('Validasi dimulai! Reward mengalir per detik.');
         }
         function stopValidationRunning() {
@@ -1799,13 +2421,15 @@
                 clearTimeout(logInterval);
                 logInterval = null;
             }
+            // Reset timer UI saat stop
+            document.getElementById('auto-claim-timer').textContent = '--';
         }
         function performAutoClaim() {
             if (!isValidationRunning || currentValidationReward <= 0) return;
             // Hitung fixed reward untuk tepat 60 detik (abaikan delta ekstra jika ada delay)
             const rewardPerSecond = stakedAmount * 0.000000038580246913580247;
             const fixedReward = rewardPerSecond * 60; // Selalu fixed ini
-            
+          
             totalRewardBalance += fixedReward;
             shareCounter++;
             // Tampilkan notifikasi
@@ -1835,6 +2459,7 @@
             document.getElementById('validation-balance').textContent = currentValidationReward.toFixed(9) + ' BossX';
             document.getElementById('reward-balance').textContent = totalRewardBalance.toFixed(9) + ' BossX';
             document.getElementById('usdt-balance').textContent = usdtBalance.toFixed(2) + ' USDT';
+            if (currentPage === 'exchange') updateAvbl();
         }
         function togglePower() {
             if (!isNodeActive) {
@@ -1855,11 +2480,11 @@
                 powerStatus.style.display = 'block';
                 powerStatus.style.color = '#10b981';
                 startCountdown();
-                startValidationRunning(); // Mulai akumulasi reward
+                startValidationRunning(); // Mulai akumulasi reward dan countdown
                 startMasaCountdown(); // Mulai countdown masa berlaku
                 // Add log entries for power on
                 appendLog('[INFO] Power On aktiv');
-                appendLog('[STATUS] Connected successfully to masternode Validasi Running');
+                // Lanjut ke startValidationRunning()
                 showSuccessMessage('Validasi dimulai! Auto-claim aktif setiap 60 detik.');
             } else {
                 // Turn OFF (manual, meski seharusnya tidak bisa)
@@ -2410,25 +3035,343 @@
             link.click();
             showSuccessMessage(`QR Code ${activeTab} berhasil didownload!`);
         }
+        // P2P Functions
+        function updateP2PContent() {
+            updateBalanceDisplays(); // Update BossX balance if needed
+            updateP2PStatistics();
+            updateP2PHistory();
+        }
+        function submitP2PTransfer() {
+            const username = document.getElementById('p2p-username').value.trim();
+            const amount = parseFloat(document.getElementById('p2p-amount').value) || 0;
+            if (!username || !username.startsWith('@')) {
+                showErrorMessage('Username harus diawali dengan @ dan tidak boleh kosong!');
+                return;
+            }
+            if (amount < 1) {
+                showErrorMessage('Minimal transfer 1 BossX!');
+                return;
+            }
+            if (amount > bossxBalance) {
+                showErrorMessage('Saldo BossX tidak mencukupi!');
+                return;
+            }
+            // Simulate transfer
+            bossxBalance -= amount;
+            // Add to history (outgoing)
+            p2pHistory.unshift({
+                id: Date.now().toString(),
+                type: 'out',
+                username: username,
+                amount: amount,
+                timestamp: new Date(),
+                status: 'completed'
+            });
+            // Reset form
+            document.getElementById('p2p-username').value = '';
+            document.getElementById('p2p-amount').value = '';
+            // Update UI
+            updateBalanceDisplays();
+            updateP2PContent();
+            showSuccessMessage(`Transfer ${amount.toFixed(9)} BossX ke ${username} berhasil!`);
+        }
+        function setMaxP2P() {
+            document.getElementById('p2p-amount').value = bossxBalance.toFixed(9);
+        }
+        function updateP2PHistory() {
+            const historyContent = document.getElementById('p2p-history-content');
+            if (p2pHistory.length === 0) {
+                historyContent.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="calendar" class="text-gray-400 w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-gray-400 text-lg font-semibold mb-2">Belum ada history transfer</h4>
+                        <p class="text-gray-500">History transfer P2P Anda akan muncul di sini</p>
+                    </div>
+                `;
+            } else {
+                let tableHTML = `
+                    <table class="w-full history-table text-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Tanggal</th>
+                                <th class="text-left">Tipe</th>
+                                <th class="text-left">Username</th>
+                                <th class="text-left">Jumlah</th>
+                                <th class="text-left">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                p2pHistory.forEach(transfer => {
+                    const typeText = transfer.type === 'out' ? 'Keluar' : 'Masuk';
+                    const typeColor = transfer.type === 'out' ? 'text-red-400' : 'text-green-400';
+                    const statusIcon = '<i data-lucide="check-circle" class="text-green-400 w-4 h-4"></i>';
+                    tableHTML += `
+                        <tr class="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors">
+                            <td class="p-3">
+                                <div class="flex items-center text-white">
+                                    <i data-lucide="clock" class="mr-2 text-gray-400 w-4 h-4"></i>
+                                    ${formatDate(transfer.timestamp)}
+                                </div>
+                            </td>
+                            <td class="p-3 ${typeColor} font-semibold">${typeText}</td>
+                            <td class="p-3 text-white">${transfer.username}</td>
+                            <td class="p-3 ${typeColor}">${formatAmount(transfer.amount)} BossX</td>
+                            <td class="p-3 flex items-center text-green-400">
+                                ${statusIcon}
+                                <span class="ml-2">Selesai</span>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tableHTML += `
+                        </tbody>
+                    </table>
+                `;
+                historyContent.innerHTML = tableHTML;
+            }
+            lucide.createIcons();
+        }
+        function updateP2PStatistics() {
+            const totalSent = p2pHistory.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
+            const totalReceived = p2pHistory.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
+            document.getElementById('p2p-total-sent').textContent = formatAmount(totalSent) + ' BossX';
+            document.getElementById('p2p-total-received').textContent = formatAmount(totalReceived) + ' BossX';
+        }
+        // Referral Functions (Fitur baru)
+        function generateReferralCode() {
+            const code = 'REF-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            document.getElementById('referral-code').value = code;
+            showSuccessMessage('Kode referral baru berhasil digenerate!');
+        }
+        function copyReferralCode() {
+            const code = document.getElementById('referral-code').value;
+            copyToClipboard(code);
+        }
+        // Exchange Functions
+        let currentSymbol = 'BTCUSDT'; // Default
+        function initExchangePage() {
+            // Setup pair buttons
+            document.querySelectorAll('.pair-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.pair-button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const pair = btn.dataset.pair;
+                    const symbol = pair.replace('/', '');
+                    currentSymbol = symbol;
+                    loadChart(symbol);
+                    debouncedLoadMarketData(pair);
+                    loadOrderBook(symbol);
+                    loadRecentTrades(symbol);
+                });
+            });
+            // Load default
+            const defaultPair = 'BossX/USDT';
+            const defaultSymbol = 'BTCUSDT';
+            document.querySelector(`[data-pair="${defaultPair}"]`).classList.add('active');
+            currentSymbol = defaultSymbol;
+            loadChart(defaultSymbol);
+            debouncedLoadMarketData(defaultPair);
+            loadOrderBook(defaultSymbol);
+            loadRecentTrades(defaultSymbol);
+            updateBalanceDisplays(); // Ensure balances are shown
+        }
+        function loadChart(symbol) {
+            const chartContainer = document.getElementById('tradingview-chart');
+            chartContainer.innerHTML = ''; // Clear previous widget
+            new TradingView.widget({
+                "width": "100%",
+                "height": "100%",
+                "symbol": `BINANCE:${symbol}`,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview-chart"
+            });
+        }
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+        const debouncedLoadMarketData = debounce(loadMarketData, 300);
+        function loadMarketData(pair) {
+            const symbol = pair.replace('/', '');
+            fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`)
+                .then(response => response.json())
+                .then(data => {
+                    const changePercent = data.priceChangePercent > 0 ? `+${data.priceChangePercent.toFixed(2)}%` : `${data.priceChangePercent.toFixed(2)}%`;
+                    const changeColor = data.priceChangePercent > 0 ? 'text-green-400' : 'text-red-400';
+                    updateMarketData(
+                        parseFloat(data.lastPrice),
+                        changePercent,
+                        parseFloat(data.quoteVolume),
+                        `${parseFloat(data.highPrice).toFixed(2)} / ${parseFloat(data.lowPrice).toFixed(2)}`
+                    );
+                    // Update color class
+                    const priceChangeEl = document.getElementById('price-change');
+                    priceChangeEl.className = `text-xl font-bold ${changeColor}`;
+                    localStorage.setItem('marketData', JSON.stringify(data)); // Cache
+                })
+                .catch(err => {
+                    console.error('Error fetching market data:', err);
+                    const cachedData = JSON.parse(localStorage.getItem('marketData')) || {};
+                    updateMarketData(cachedData.lastPrice || 0, cachedData.priceChangePercent || '+0.00%', cachedData.quoteVolume || 0, `${cachedData.highPrice || 0} / ${cachedData.lowPrice || 0}`);
+                    showErrorMessage('Gagal load data market. Menggunakan data cache.');
+                });
+        }
+        function updateMarketData(price, change, volume, highlow) {
+            document.getElementById('current-price').textContent = `$${price.toLocaleString()}`;
+            document.getElementById('price-change').textContent = change;
+            document.getElementById('volume').textContent = `$${volume.toLocaleString()}`;
+            document.getElementById('high-low').textContent = highlow;
+        }
+        // Order Book Functions
+        function loadOrderBook(symbol) {
+            if (ws) ws.close();
+            ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth@100ms`);
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                updateOrderBook(data);
+            };
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+                showErrorMessage('Koneksi data real-time gagal. Menggunakan data cache.');
+                fetchOrderBook(symbol);
+            };
+        }
+        function fetchOrderBook(symbol) {
+            fetch(`https://api.binance.com/api/v3/depth?symbol=${symbol}&limit=50`)
+                .then(response => response.json())
+                .then(data => updateOrderBook(data))
+                .catch(err => console.error('Error fetching order book:', err));
+            // Refresh every 5 seconds
+            setTimeout(() => fetchOrderBook(symbol), 5000);
+        }
+        let asks = []; // For spread calculation
+        let bids = []; // For spread calculation
+        function updateOrderBook(data) {
+            requestAnimationFrame(() => {
+                // Update global asks and bids for spread
+                asks = data.a || data.asks;
+                bids = data.b || data.bids;
+                // Clear skeleton
+                document.getElementById('buy-orders').innerHTML = '';
+                document.getElementById('sell-orders').innerHTML = '';
+                // Enhanced with depth bars
+                const maxVolume = Math.max(...asks.map(a => parseFloat(a[1])), ...bids.map(b => parseFloat(b[1])));
+                // Sells (asks) on top, highest price first (reverse asks since they are low to high)
+                const sellOrders = document.getElementById('sell-orders');
+                asks.slice(0, 20).reverse().forEach(ask => {
+                    const price = parseFloat(ask[0]).toFixed(2);
+                    const amount = parseFloat(ask[1]).toFixed(6);
+                    const total = (parseFloat(ask[0]) * parseFloat(ask[1])).toFixed(2);
+                    const width = (parseFloat(ask[1]) / maxVolume * 100) + '%';
+                    const row = document.createElement('tr');
+                    row.className = 'relative';
+                    row.innerHTML = `
+                        <td class="sell-order">${price}</td>
+                        <td>${amount}</td>
+                        <td>${total}</td>
+                        <div class="depth-bar sell-depth" style="width: ${width};"></div>
+                    `;
+                    sellOrders.appendChild(row);
+                });
+                // Buys (bids) below, highest first (bids are high to low)
+                const buyOrders = document.getElementById('buy-orders');
+                bids.slice(0, 20).forEach(bid => {
+                    const price = parseFloat(bid[0]).toFixed(2);
+                    const amount = parseFloat(bid[1]).toFixed(6);
+                    const total = (parseFloat(bid[0]) * parseFloat(bid[1])).toFixed(2);
+                    const width = (parseFloat(bid[1]) / maxVolume * 100) + '%';
+                    const row = document.createElement('tr');
+                    row.className = 'relative';
+                    row.innerHTML = `
+                        <td class="buy-order">${price}</td>
+                        <td>${amount}</td>
+                        <td>${total}</td>
+                        <div class="depth-bar buy-depth" style="width: ${width};"></div>
+                    `;
+                    buyOrders.appendChild(row);
+                });
+                // Update spread
+                if (asks.length > 0 && bids.length > 0) {
+                    const bestBid = parseFloat(bids[0][0]);
+                    const bestAsk = parseFloat(asks[0][0]);
+                    const spreadValue = (bestAsk - bestBid).toFixed(2);
+                    const spreadPercent = ((bestAsk - bestBid) / bestBid * 100).toFixed(2);
+                    document.getElementById('spread').textContent = `Spread: ${spreadValue} (${spreadPercent}%)`;
+                } else {
+                    document.getElementById('spread').textContent = 'Spread: Loading...';
+                }
+            });
+        }
+        function loadRecentTrades(symbol) {
+            const wsTrades = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`);
+            wsTrades.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                addRecentTrade(data);
+            };
+        }
+        function addRecentTrade(trade) {
+            const tradesBody = document.getElementById('recent-trades');
+            const row = document.createElement('tr');
+            const sideColor = trade.m ? 'text-red-400' : 'text-green-400'; // m = maker (sell?)
+            row.innerHTML = `
+                <td class="p-2 ${sideColor}">${parseFloat(trade.p).toFixed(2)}</td>
+                <td class="p-2 text-white">${parseFloat(trade.q).toFixed(4)}</td>
+                <td class="p-2 text-gray-400">${new Date(trade.T).toLocaleTimeString()}</td>
+            `;
+            tradesBody.prepend(row);
+            if (tradesBody.children.length > 50) tradesBody.removeChild(tradesBody.lastChild);
+        }
+        function demoTrade(type) {
+            showSuccessMessage(`${type.toUpperCase()} order demo berhasil! (Tidak ada transaksi nyata)`);
+        }
+        // Tambahkan logic untuk order type
+        document.addEventListener('change', function(e) {
+            if (e.target.id === 'buy-order-type') {
+                const priceInput = document.getElementById('buy-price');
+                priceInput.style.display = e.target.value === 'market' ? 'none' : 'block';
+                priceInput.title = e.target.value === 'market' ? 'Harga otomatis untuk market order' : '';
+            }
+            if (e.target.id === 'sell-order-type') {
+                const priceInput = document.getElementById('sell-price');
+                priceInput.style.display = e.target.value === 'market' ? 'none' : 'block';
+                priceInput.title = e.target.value === 'market' ? 'Harga otomatis untuk market order' : '';
+            }
+        });
+        // Update AVBL
+        function updateAvbl() {
+            document.getElementById('buy-avbl').textContent = usdtBalance.toFixed(2) + ' USDT';
+            document.getElementById('sell-avbl').textContent = bossxBalance.toFixed(9) + ' BossX';
+        }
+        updateAvbl();
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar toggle
             document.getElementById('toggle-sidebar').addEventListener('click', function() {
                 const sidebar = document.getElementById('sidebar');
                 const logoText = document.getElementById('logo-text');
-                const sidebarFooter = document.getElementById('sidebar-footer');
                 const menuTexts = document.querySelectorAll('.menu-text');
                 const toggleIcon = this.querySelector('[data-lucide]');
                 if (sidebar.classList.contains('collapsed')) {
                     sidebar.classList.remove('collapsed');
                     logoText.style.display = 'block';
-                    sidebarFooter.style.display = 'block';
                     menuTexts.forEach(text => text.style.display = 'inline');
                     toggleIcon.setAttribute('data-lucide', 'chevron-left');
                 } else {
                     sidebar.classList.add('collapsed');
                     logoText.style.display = 'none';
-                    sidebarFooter.style.display = 'none';
                     menuTexts.forEach(text => text.style.display = 'none');
                     toggleIcon.setAttribute('data-lucide', 'chevron-right');
                 }
@@ -2482,6 +3425,9 @@
                     showSuccessMessage('History withdrawal berhasil diperbarui!');
                     updateWithdrawalHistory();
                 }
+                if (e.target.id === 'p2p-max') {
+                    setMaxP2P();
+                }
             });
             document.addEventListener('input', function(e) {
                 if (!e.target) return;
@@ -2503,26 +3449,26 @@
             updateBalanceDisplays();
             updateDepositContent();
             updateWithdrawalContent();
+            updateP2PContent();
             lucide.createIcons();
+            startMasaCountdown(); // Start masa berlaku countdown on load
+            setInterval(() => addRandomLog(), Math.floor(Math.random() * 4000) + 1000); // Start log simulation
             setTimeout(() => {
                 showSuccessMessage('Selamat datang di BossX Crypto Exchange Platform!');
             }, 1000);
         });
         console.log('BossX Crypto Exchange Platform - Sistem Reward Per Detik berhasil dimuat!');
-
         // =============================
         // CHAT ROOM INTEGRATION
         // =============================
         function initializeChatRoom() {
             const { useState, useEffect, useRef, createElement: h } = React;
-
             // Custom Icons as Components
             const MessageCircleIcon = ({ size = 24, className = "" }) => (
                 h('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", className },
                     h('path', { d: "m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z" })
                 )
             );
-
             const UsersIcon = ({ size = 24, className = "" }) => (
                 h('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", className },
                     h('path', { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }),
@@ -2530,27 +3476,23 @@
                     h('path', { d: "m22 21-3.4-3.4M17 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" })
                 )
             );
-
             const SendIcon = ({ size = 24, className = "" }) => (
                 h('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", className },
                     h('path', { d: "m22 2-7 20-4-9-9-4Z" }),
                     h('path', { d: "M22 2 11 13" })
                 )
             );
-
             const ClockIcon = ({ size = 24, className = "" }) => (
                 h('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", className },
                     h('circle', { cx: "12", cy: "12", r: "10" }),
                     h('polyline', { points: "12,6 12,12 16,14" })
                 )
             );
-
             const ActivityIcon = ({ size = 24, className = "" }) => (
                 h('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", className },
                     h('path', { d: "M22 12h-4l-3 9L9 3l-3 9H2" })
                 )
             );
-
             // Mock Data
             const mockRooms = [
                 { id: '#validator', description: 'Diskusi Validator & Masternode' },
@@ -2558,7 +3500,6 @@
                 { id: '#support', description: 'Bantuan & Dukungan Teknis' },
                 { id: '#founder', description: 'Diskusi dengan Founder' }
             ];
-
             const mockUsers = [
                 { id: 1, name: 'Admin', status: 'online' },
                 { id: 2, name: 'Founder', status: 'online' },
@@ -2569,7 +3510,6 @@
                 { id: 7, name: 'CryptoKing', status: 'online' },
                 { id: 8, name: 'BlockchainDev', status: 'online' }
             ];
-
             const mockMessages = [
                 {
                     id: 1,
@@ -2644,7 +3584,6 @@
                     isUser: false
                 }
             ];
-
             // Dashboard Component
             const Dashboard = ({ onNavigate }) => {
                 const menuCards = [
@@ -2661,7 +3600,6 @@
                         stats: '15 Online'
                     }
                 ];
-
                 return (
                     h('div', { className: "min-h-screen bg-black text-white p-6" },
                         h('div', { className: "max-w-7xl mx-auto" },
@@ -2669,14 +3607,13 @@
                             h('div', { className: "mb-8" },
                                 h('h1', { className: "text-4xl font-bold text-white mb-2" }, "Dashboard BossX")
                             ),
-
                             // Menu Cards Grid
                             h('div', { className: "grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6" },
                                 menuCards.map((card) => {
                                     const IconComponent = card.icon;
                                     return (
-                                        h('div', 
-                                            { 
+                                        h('div',
+                                            {
                                                 key: card.id,
                                                 className: `relative group cursor-pointer transition-all duration-500 card-hover ${card.bgColor} ${card.borderColor} border-2 backdrop-blur-sm overflow-hidden rounded-lg hover-glow`,
                                                 onClick: () => onNavigate(card.route)
@@ -2690,14 +3627,14 @@
                                                         card.stats
                                                     )
                                                 ),
-                                                
+                                              
                                                 h('h3', { className: `text-xl font-bold ${card.textColor} mb-2 group-hover:text-white transition-colors duration-300` },
                                                     card.title
                                                 ),
                                                 h('p', { className: "text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300" },
                                                     card.description
                                                 ),
-                                                
+                                              
                                                 // Hover Effect Gradient
                                                 h('div', { className: `absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${card.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500` })
                                             )
@@ -2705,7 +3642,6 @@
                                     );
                                 })
                             ),
-
                             // Quick Stats
                             h('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-6 mt-8" },
                                 h('div', { className: "bg-gray-900/50 border border-gray-700 backdrop-blur-sm rounded-lg p-6" },
@@ -2719,7 +3655,7 @@
                                         )
                                     )
                                 ),
-                                
+                              
                                 h('div', { className: "bg-gray-900/50 border border-gray-700 backdrop-blur-sm rounded-lg p-6" },
                                     h('div', { className: "flex items-center gap-4" },
                                         h('div', { className: "p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl" },
@@ -2736,7 +3672,6 @@
                     )
                 );
             };
-
             // ChatRoom Component
             const ChatRoom = ({ onNavigate }) => {
                 const [messages, setMessages] = useState(mockMessages);
@@ -2744,61 +3679,51 @@
                 const [messageInput, setMessageInput] = useState('');
                 const [onlineCount, setOnlineCount] = useState(15);
                 const messagesEndRef = useRef(null);
-
                 const scrollToBottom = () => {
                     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
                 };
-
                 useEffect(() => {
                     scrollToBottom();
                 }, [messages]);
-
                 const handleSendMessage = () => {
                     if (!messageInput.trim()) return;
-
                     const newMessage = {
                         id: Date.now(),
                         sender: 'User',
                         content: messageInput.trim(),
-                        timestamp: new Date().toLocaleTimeString('id-ID', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
+                        timestamp: new Date().toLocaleTimeString('id-ID', {
+                            hour: '2-digit',
+                            minute: '2-digit'
                         }),
                         room: currentRoom,
                         isUser: true
                     };
-
                     setMessages(prev => [...prev, newMessage]);
                     setMessageInput('');
                 };
-
                 const handleKeyPress = (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
                         handleSendMessage();
                     }
                 };
-
                 const getAvatarLetter = (name) => {
                     return name.charAt(0).toUpperCase();
                 };
-
                 const currentRoomMessages = messages.filter(msg => msg.room === currentRoom);
-
                 return (
                     h('div', { className: "min-h-screen bg-black text-white p-4 flex items-center justify-center" },
-                        h('div', { className: "w-full max-w-7xl" },
+                        h('div', { className: "w-full max-w-full" },
                             // Back Button
-                            h('button', 
-                                { 
+                            h('button',
+                                {
                                     onClick: () => onNavigate('dashboard'),
                                     className: "mb-4 text-amber-500 hover:text-amber-400 flex items-center gap-2 text-lg font-medium"
                                 },
                                 "← Kembali ke Dashboard"
                             ),
-
                             // Chat Room Card dengan Glowing Border
-                            h('div', { className: "relative bg-gray-900/90 border border-gray-700 backdrop-blur-sm h-[800px] overflow-hidden rounded-3xl glowing-border" },
+                            h('div', { className: "relative bg-gray-900/90 border border-gray-700 backdrop-blur-sm h-[calc(100vh-100px)] overflow-hidden rounded-3xl glowing-border" },
                                 h('div', { className: "relative bg-gray-900/95 rounded-3xl h-full" },
                                     // Header
                                     h('div', { className: "bg-black/50 border-b border-gray-700 p-6" },
@@ -2813,7 +3738,6 @@
                                             )
                                         )
                                     ),
-
                                     h('div', { className: "flex h-[calc(100%-85px)]" },
                                         // Sidebar
                                         h('div', { className: "w-80 bg-gray-950/80 border-r border-gray-700 p-6" },
@@ -2840,7 +3764,6 @@
                                                     ))
                                                 )
                                             ),
-
                                             h('div', { className: "bg-green-500/5 border border-green-500/20 rounded-2xl p-6" },
                                                 h('h3', { className: "text-lg font-bold text-green-400 mb-3 flex items-center gap-2" },
                                                     h(UsersIcon, { size: 20 }),
@@ -2849,7 +3772,6 @@
                                                 h('p', { className: "text-gray-300" }, "Bergabunglah dengan komunitas aktif BossX")
                                             )
                                         ),
-
                                         // Main Chat Area
                                         h('div', { className: "flex-1 flex flex-col bg-gray-950/50" },
                                             // Channel Header
@@ -2865,35 +3787,31 @@
                                                     "Live"
                                                 )
                                             ),
-
                                             // Messages
                                             h('div', { className: "flex-1 p-6 overflow-y-auto custom-scroll" },
                                                 h('div', { className: "space-y-4" },
-                                                    currentRoomMessages.length > 0 ? currentRoomMessages.map((message, index) => (
-                                                        h('div', 
-                                                            { 
-                                                                key: message.id, 
-                                                                className: "flex gap-4 message-animate",
-                                                                style: { animationDelay: `${index * 80}ms` }
+                                                    currentRoomMessages.length > 0 ? currentRoomMessages.map(msg => (
+                                                        h('div',
+                                                            {
+                                                                key: msg.id,
+                                                                className: "flex gap-4 message-animate"
                                                             },
                                                             h('div', { className: "flex flex-col items-center gap-1" },
-                                                                h('div', { 
-                                                                    className: `w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                                                                        message.isUser ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-amber-500 to-orange-600'
-                                                                    }`
-                                                                }, getAvatarLetter(message.sender)),
-                                                                h('span', { className: "text-xs text-gray-400 max-w-[60px] truncate" }, message.sender)
+                                                                h('div', {
+                                                                    className: `w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${msg.isUser ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-amber-500 to-orange-600'}`
+                                                                }, getAvatarLetter(msg.sender)),
+                                                                h('span', { className: "text-xs text-gray-400 max-w-[60px] truncate" }, msg.sender)
                                                             ),
                                                             h('div', { className: "flex-1" },
                                                                 h('div', { className: "flex justify-between items-center mb-2" },
-                                                                    h('span', { className: "font-bold text-amber-500" }, message.sender),
+                                                                    h('span', { className: "font-bold text-amber-500" }, msg.sender),
                                                                     h('span', { className: "text-xs text-gray-500 flex items-center gap-1" },
                                                                         h(ClockIcon, { size: 12 }),
-                                                                        message.timestamp
+                                                                        msg.timestamp
                                                                     )
                                                                 ),
                                                                 h('div', { className: "bg-white/5 backdrop-blur-sm rounded-2xl rounded-tl-sm p-4 max-w-[85%] border border-gray-700/50" },
-                                                                    h('p', { className: "text-white leading-relaxed whitespace-pre-wrap" }, message.content)
+                                                                    h('p', { className: "text-white leading-relaxed whitespace-pre-wrap" }, msg.content)
                                                                 )
                                                             )
                                                         )
@@ -2906,7 +3824,6 @@
                                                     h('div', { ref: messagesEndRef })
                                                 )
                                             ),
-
                                             // Input Area
                                             h('div', { className: "p-6 border-t-2 border-gray-700 bg-gray-950/50" },
                                                 h('div', { className: "text-right text-sm text-gray-500 font-bold mb-2" },
@@ -2938,18 +3855,15 @@
                     )
                 );
             };
-
             // Main App Component
             const App = () => {
                 const [currentPage, setCurrentPage] = useState('chat-room');
-
                 const navigate = (page) => {
                     setCurrentPage(page);
                     if (page === 'dashboard') {
                         showPage('dashboard'); // Navigate back to main dashboard
                     }
                 };
-
                 switch(currentPage) {
                     case 'dashboard':
                         return h(Dashboard, { onNavigate: navigate });
@@ -2959,7 +3873,6 @@
                         return h(ChatRoom, { onNavigate: navigate });
                 }
             };
-
             // Render the app
             ReactDOM.render(h(App), document.getElementById('chat-room-container'));
         }
